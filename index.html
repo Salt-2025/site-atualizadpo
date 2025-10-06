@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>SALT — Sistema Automatizado de Limpeza e Tratamento</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="./assets/Css/style.css">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- EmailJS -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+    <!-- JS -->
+    <script src="./assets/js/java.js" defer></script>
+</head>
+
+<body>
+    <!-- Cabeçalho -->
+    <header class="site-header">
+        <div class="container header-inner">
+            <div>
+                <h1 class="project-title">SALT</h1>
+                <p class="tagline">Sistema Automatizado de Limpeza e Tratamento — Dessalinização Inteligente</p>
+            </div>
+            <div class="header-right">
+                <button id="themeToggle" class="btn small">🌙</button>
+                <button id="connectBtn" class="btn small">Conectar (SSE)</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Menu -->
+    <nav class="main-nav">
+        <div class="container nav-inner">
+            <a href="#sobre">Sobre</a>
+            <a href="#objetivos">Objetivos</a>
+            <a href="#metodologia">Metodologia</a>
+            <a href="#resultados">Resultados</a>
+            <a href="#informacoes">Informações</a>
+            <a href="#dados">Dados em tempo real</a>
+            <a href="#contato">Contato</a>
+        </div>
+    </nav>
+
+    <main class="container">
+
+        <section id="sobre" class="card section">
+            <h2>Sobre o Projeto</h2>
+            <p>O <strong>SALT</strong> é um sistema automatizado de <strong>dessalinização e purificação de água</strong> que utiliza sensores IoT e microcontroladores ESP32 para monitorar parâmetros de qualidade da água em tempo real, como pH, salinidade,
+                temperatura e nível.</p>
+        </section>
+
+        <section id="objetivos" class="card section">
+            <h2>Objetivos</h2>
+            <ul>
+                <li>Automatizar o processo de dessalinização e limpeza da água.</li>
+                <li>Monitorar e registrar dados de sensores em tempo real.</li>
+                <li>Promover sustentabilidade através da tecnologia IoT.</li>
+            </ul>
+        </section>
+
+        <section id="metodologia" class="card section">
+            <h2>Metodologia</h2>
+            <p>O sistema foi desenvolvido em etapas: pesquisa, prototipagem com ESP32, integração de sensores (pH, salinidade, temperatura e nível) e visualização via dashboard web com gráficos e alertas dinâmicos.</p>
+        </section>
+
+        <section id="resultados" class="card section">
+            <h2>Resultados Esperados</h2>
+            <ul>
+                <li>Redução do consumo de água potável.</li>
+                <li>Eficiência no controle da salinidade e pureza.</li>
+                <li>Facilidade de monitoramento remoto com dados em tempo real.</li>
+            </ul>
+        </section>
+
+        <section id="informacoes" class="card section">
+            <h2>Informações Técnicas</h2>
+            <ul>
+                <li><strong>pH</strong> — Mede acidez da água.</li>
+                <li><strong>Salinidade</strong> — Detecta concentração de sais.</li>
+                <li><strong>Temperatura</strong> — Controla o nível térmico.</li>
+                <li><strong>Nível</strong> — Mede o volume disponível no reservatório.</li>
+            </ul>
+        </section>
+
+        <section id="dados" class="card section">
+            <h2>Dados em Tempo Real</h2>
+
+            <div class="realtime-controls">
+                <label>Método:
+          <select id="methodSelect">
+            <option value="sse">SSE</option>
+            <option value="ws">WebSocket</option>
+            <option value="poll">REST Polling</option>
+          </select>
+        </label>
+                <label>Endpoint:
+          <input id="endpointInput" type="text" value="http://localhost:3000" />
+        </label>
+                <button id="startBtn" class="btn">Iniciar</button>
+                <button id="stopBtn" class="btn outline">Parar</button>
+            </div>
+
+            <div id="status" class="status">Status: desconectado</div>
+
+            <div class="card small">
+                <h3>Leituras Atuais</h3>
+                <ul id="readingsList" class="readings">
+                    <li>pH: <span id="phVal">—</span></li>
+                    <li>Salinidade (‰): <span id="salVal">—</span></li>
+                    <li>Temperatura (°C): <span id="tempVal">—</span></li>
+                    <li>Nível (%): <span id="levelVal">—</span></li>
+                    <li>Última Atualização: <span id="lastUpdate">—</span></li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>Gráfico de Monitoramento</h3>
+                <canvas id="liveChart" height="140"></canvas>
+            </div>
+
+            <div class="card">
+                <h3>Log de Comunicação</h3>
+                <pre id="logArea" class="log"></pre>
+            </div>
+        </section>
+
+        <section id="contato" class="card section">
+            <h2>Entre em Contato</h2>
+            <form id="contactForm" class="contact-form">
+                <label for="name">Nome:</label>
+                <input type="text" id="name" placeholder="Seu nome completo" required>
+                <label for="email">E-mail:</label>
+                <input type="email" id="email" placeholder="exemplo@email.com" required>
+                <label for="message">Mensagem:</label>
+                <textarea id="message" rows="4" placeholder="Digite sua mensagem..." required></textarea>
+                <button type="submit" class="btn">Enviar</button>
+            </form>
+            <div id="formMsg" class="form-msg"></div>
+            <hr class="divider">
+            <div class="social-section">
+                <br>
+                <br>
+                <div class="social-section">
+                    <h3>Nossos Contatos</h3>
+                    <div class="social-links">
+                        <a href="https://wa.me/5571999999999" target="_blank" class="social-btn whatsapp">
+                            <i class="ri-whatsapp-line"></i> WhatsApp
+                        </a>
+                        <a href="https://www.instagram.com/projeto_salt/" target="_blank" class="social-btn instagram">
+                            <i class="ri-instagram-line"></i> Instagram
+                        </a>
+                        <a href="mailto:contato@saltsite.local" class="social-btn email">
+                            <i class="ri-mail-line"></i> E-mail
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Certifique-se de ter o Remix Icon no <head> -->
+                <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+
+                <br>
+                <br>
+
+                <p class="creditos">
+                    <strong>Equipe SALT:</strong> Ana Luiza Cajazeira Santana, André Santos Rodrigues, Danilo Minas Novas Bonatti, Evelyn Santos de Oliveira, Gabriel da Silva Gomes da Cunha, Levi da Silva dos Santos, Vinicius Daltro dos Santos<br>
+                    <strong>Orientadora:</strong> Elisabete Guedes Conceição<br> Camaçari / BA — FECITESC 2025
+                </p>
+                <br>
+                <br>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>SALT — Sistema Automatizado de Limpeza e Tratamento | FECITESC 2025</p>
+        </div>
+    </footer>
+</body>
+
+</html>
